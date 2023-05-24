@@ -98,7 +98,11 @@
         <!-- <HINT> Each example will have many questions -->
         {% for lesson in course.lesson_set.all %}
         <!-- <div>{{ lesson.questions }}</div> -->
-        <form id="questionform" action="point to a submit view" method="post">
+        <form
+          id="questionform"
+          action="{% url 'onlinecourse:submit' course.id %}"
+          method="post"
+        >
           {% for question in lesson.question_set.all %}
           <div class="card mt-1">
             <div class="card-header"><h5>{{ question.question_text}}</h5></div>
@@ -119,17 +123,6 @@
               </div>
 
               {% endfor %}
-              <!-- <div class="form-check">
-                <label class="form-check-label">
-                  <input
-                    type="checkbox"
-                    name="choice_{{choice.id}}"
-                    class="form-check-input"
-                    id="{{choice.id}}"
-                    value="{{choice.id}}"
-                  />{{ choice.choice_text }}
-                </label>
-              </div> -->
             </div>
           </div>
           {% endfor %}
