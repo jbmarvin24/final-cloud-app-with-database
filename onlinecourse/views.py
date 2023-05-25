@@ -156,36 +156,37 @@ def show_exam_result(request, course_id, submission_id):
     # Get Answers
     answers = submission.choices.all()
 
+    # print(answers.count())
+
     # Get All question Count
-    questionCount = 0
+    correct_choices_count = 0
     lessons = Lesson.objects.filter(course=course)
     for lesson in lessons:
-        questionCount += Question.objects.filter(lessons=lesson).count()
+        for question in Question.objects.filter(lessons=lesson):
+            correct_choices_count += Choice.objects.filter(
+                question=question, is_correct=True).count()
 
-    # print(questionCount)
+    # print(question_count)
 
     # Get the count of correct answer
-    correctAnswerCount = 0
+    correct_answer_count = 0
 
     for answer in answers:
         if answer.is_correct:
-            correctAnswerCount += 1
+            correct_answer_count += 1
 
-    print(correctAnswerCount)
+    # print(correct_answer_count)
 
     # Get the total score
-    grade = int((correctAnswerCount / questionCount) * 100)
+    grade = int((correct_answer_count / correct_choices_count) * 100)
 
     # Set to context
     context["answers"] = answers
     context["grade"] = grade
 
+    # print(answers.filter(choice))
+
     # print(submission)
     # print(submission.choices.count())
 
     return render(request, 'onlinecourse/exam_result_bootstrap.html', context)
-
-
-# def show_exam_result(request):
-#     context = {}
-#     return render(request, 'onlinecourse/exam_result_bootstrap.html', context)
